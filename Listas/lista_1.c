@@ -1,40 +1,48 @@
-#include <stdio.h>
-
+#include<stdio.h>
 #define TAM 8
 
-typedef struct{
+typedef struct {
     int info;
     int prox;
 } Node;
 
-void iniciaLista(Node *lista) {
-    for (int i = 0; i < TAM; i++){
-        lista[i].info = i;
+int comeco;
+int disponivel;
+
+void iniciaLista(Node *lista, int *comeco, int *disponivel) {
+
+    for (int i = 0; i < TAM-1; i++) {
+        lista[i].info = 0;
         lista[i].prox = i + 1;
     }
-    lista[6].prox = 5;
-    lista[4].prox = 6;
-    lista[5].prox = 7;
-    lista[TAM - 1].prox =-1;
+    lista[TAM-1].info = 0;
+    lista[TAM-1].prox = -1;
+    *comeco = -1;
+    *disponivel = 0;
 }
 
-void imprimeLista(Node *lista, int comeco) {
-    int i = lista[comeco].prox;
-    printf("Lista / Info: %d, Prox; %d\n", lista[comeco].info, lista[comeco].prox);
-    while(i != comeco) {
-        printf("Lista / Info: %d, Prox; %d\n", lista[i].info, lista[i].prox);
-        i = lista[i].prox;
+// Comeco == 0
+void imprimeLista(Node *lista, int comeco, int disponivel) {
+    if(comeco == -1){
+        printf("Lista vazia! \n");
+    }
+    else {
+        int proximo = lista[comeco].prox;
+        printf("Lista / Info: %d, Prox: %d\n", lista[comeco].info, lista[comeco].prox);
+        while(proximo != -1 && proximo != disponivel) {  
+            printf("Lista / Info: %d, Prox: %d\n", lista[proximo].info, lista[proximo].prox);
+            proximo = lista[proximo].prox;
+        }
     }
 }
 
+void adicionaNaLista(Node lista[], int *disponivel, int valor) {
 
+}
 int main() {
-
-    int comeco = 0;
     Node lista[TAM];
-    iniciaLista(lista);
-    imprimeLista(lista, comeco);
-
-
+    iniciaLista(lista, &comeco, &disponivel);
+    imprimeLista(lista, comeco, disponivel);
+    adicionaNaLista(lista, &disponivel, 18);
     return 0;
 }
