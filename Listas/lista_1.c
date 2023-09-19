@@ -67,6 +67,9 @@ int main() {
             scanf("%d", &valor);
             adicionaNaLista(lista, &disponivel, &comeco, valor);
             break;
+        case 3:
+            printf("Removendo:\n");
+            removeNaLista(lista, &disponivel, &comeco);
         case 0:
             printf("Saindo do menu\n");
             break;
