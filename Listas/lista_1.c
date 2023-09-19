@@ -36,13 +36,44 @@ void imprimeLista(Node *lista, int comeco, int disponivel) {
     }
 }
 
-void adicionaNaLista(Node lista[], int *disponivel, int valor) {
-
+void adicionaNaLista(Node lista[], int *disponivel, int *comeco, int valor) {
+    lista[*disponivel].info = valor;
+    lista[*disponivel].prox = *disponivel + 1;
+    *disponivel += 1;
+    if(*comeco == -1){
+        *comeco += 1;
+    }
 }
 int main() {
     Node lista[TAM];
     iniciaLista(lista, &comeco, &disponivel);
-    imprimeLista(lista, comeco, disponivel);
-    adicionaNaLista(lista, &disponivel, 18);
+
+    int opcao, valor;
+    do {
+        printf("\n\nMenu de operações\n");
+        printf("Case 0: Sair do menu\n");
+        printf("Case 1: Imprimir a lista\n");
+        printf("Case 2: Adicionar elemento na lista\n");
+        printf("Selecione o valor:");
+        scanf("%d", &opcao);
+        printf("\n\n");
+        switch (opcao) {
+        case 1:
+        printf("Imprimindo a lista:\n");
+            imprimeLista(lista, comeco, disponivel);
+            break;
+        case 2:
+            printf("Digite o valor a ser inserido:\n");
+            scanf("%d", &valor);
+            adicionaNaLista(lista, &disponivel, &comeco, valor);
+            break;
+        case 0:
+            printf("Saindo do menu\n");
+            break;
+        default:
+            printf("Opção inválida\n");
+            break;
+    }
+    } while(opcao != 0);
     return 0;
 }
