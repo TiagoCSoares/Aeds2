@@ -37,13 +37,64 @@ void imprimeLista(Node *lista, int comeco, int disponivel) {
 }
 
 void adicionaNaLista(Node lista[], int *disponivel, int *comeco, int valor) {
-    lista[*disponivel].info = valor;
-    lista[*disponivel].prox = *disponivel + 1;
-    *disponivel += 1;
-    if(*comeco == -1){
-        *comeco += 1;
+    if(*disponivel == -1){
+        printf("Lista cheia\n");
+    } else {
+        if (*comeco == -1) {
+            *comeco = *disponivel;
+        }
+        lista[*disponivel].info = valor;
+        *disponivel = lista[*disponivel].prox;
+        if(*disponivel == TAM -1){
+            *disponivel = -1;
+        }
     }
 }
+
+// l[ant].prox = l[atual].prox
+// l[atual].prox = -1
+// l[fim].prox = atual
+
+void removerDaLista(Node *lista, int *disponivel, int comeco, int valor) {
+    int atual = comeco;
+    int anterior = atual;
+    int removido = 0;
+    if (comeco == -1) {
+        printf("Não há elementos a serem removidos\n");
+    } else {
+        do {
+            if (lista[atual].info == valor) {
+                lista[anterior].prox = lista[atual].prox;
+                removido = 1;
+            }
+            anterior = atual;
+            atual = lista[atual].prox;
+        } while(lista[comeco].info != -1);
+      }
+}
+
+//void removeFimLista(Node lista[], int *disponivel, int *comeco) {
+//    if(*disponivel == -1){
+//        *disponivel = TAM -1;
+//        lista[*disponivel].info = 0;
+//    } else {
+//        lista[*disponivel].info = 0;
+//        *disponivel -= 1;
+//    }
+//}
+//
+//void removeComecoLista(Node lista[], int *disponivel, int *comeco) {
+//    lista[*comeco].info = 0;Removendo:
+//    if(*disponivel == -1) {
+//        realocaLista(lista, *disponivel, *comeco);
+//    }
+//
+//}
+//
+//void realocaLista(Node lista[], int *disponivel, int *comeco) {
+//    printf("fsafs");
+//}
+
 int main() {
     Node lista[TAM];
     iniciaLista(lista, &comeco, &disponivel);
@@ -54,6 +105,7 @@ int main() {
         printf("Case 0: Sair do menu\n");
         printf("Case 1: Imprimir a lista\n");
         printf("Case 2: Adicionar elemento na lista\n");
+        printf("Case 3: Remover elemento no fim da lista\n");
         printf("Selecione o valor:");
         scanf("%d", &opcao);
         printf("\n\n");
@@ -68,8 +120,10 @@ int main() {
             adicionaNaLista(lista, &disponivel, &comeco, valor);
             break;
         case 3:
-            printf("Removendo:\n");
-            removeNaLista(lista, &disponivel, &comeco);
+            printf("Valor a ser removido\n");
+            scanf("%d", &valor);
+            removerDaLista(lista, &disponivel, comeco, valor);
+            break;
         case 0:
             printf("Saindo do menu\n");
             break;
