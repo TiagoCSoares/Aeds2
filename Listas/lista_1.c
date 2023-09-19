@@ -53,24 +53,28 @@ void adicionaNaLista(Node lista[], int *disponivel, int *comeco, int valor) {
 
 // l[ant].prox = l[atual].prox
 // l[atual].prox = -1
-// l[fim].prox = atual
+// l[fim].prox = atualq:q
+
 
 void removerDaLista(Node *lista, int *disponivel, int comeco, int valor) {
     int atual = comeco;
     int anterior = atual;
+    int fim = lista[atual].prox;
     int removido = 0;
     if (comeco == -1) {
         printf("Não há elementos a serem removidos\n");
     } else {
+    while(lista[fim].prox != -1) {
+        fim = lista[fim].prox;
+    }
         do {
-            if (lista[atual].info == valor) {
+            if(lista[atual].info == valor) {
                 lista[anterior].prox = lista[atual].prox;
-                removido = 1;
             }
             anterior = atual;
             atual = lista[atual].prox;
-        } while(lista[comeco].info != -1);
-      }
+        } while(lista[atual].prox != fim); 
+    }
 }
 
 //void removeFimLista(Node lista[], int *disponivel, int *comeco) {
