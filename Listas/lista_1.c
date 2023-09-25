@@ -47,40 +47,39 @@ void adicionaNaLista(Node lista[], int *disponivel, int *comeco, int valor) {
         }
         lista[*disponivel].info = valor;
         *disponivel = lista[*disponivel].prox;
-        if(lista[*disponivel].prox == -1){
-            *disponivel = -1;
-        }
     }
 }
-
-// l[ant].prox = l[atual].prox
-// l[atual].prox = -1
-// l[fim].prox = atualq:q
-
 
 void removerDaLista(Node *lista, int *disponivel, int *comeco, int valor) {
     int atual = *comeco;
     int anterior = atual;
+    int aux;
     int fim = lista[atual].prox;
     int removido = 0;
     if (*comeco == -1) {
         printf("Não há elementos a serem removidos\n");
     } else {
     while(lista[fim].prox != -1) {
+        aux = lista[fim].prox;
+        fim = aux; }
         fim = lista[fim].prox;
-    }
         do {
             if(lista[atual].info == valor && atual == *comeco){
-                *comeco = lista[atual].prox;
-            } else if (lista[atual].info == valor && lista[atual].prox == -1)
-            {
-                *disponivel = anterior;
-            } else if (lista[atual].info == valor) {
+                aux = *comeco;
+                *comeco = lista[*comeco].prox;
+                *disponivel = fim;
+            }else if(lista[atual].info == valor) {
                 lista[anterior].prox = lista[atual].prox;
             }
             anterior = atual;
             atual = lista[atual].prox;
-        } while(lista[atual].prox != fim); 
+        } while(lista[atual].prox != fim);
+        if(lista[atual].info == valor && lista[atual].prox == fim) {
+            lista[anterior].prox = -1;
+        }
+        if(*disponivel == -1) {
+            *disponivel = atual;
+        }
     }
 }
 
