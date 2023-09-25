@@ -45,7 +45,7 @@ void adicionaNaLista(Node lista[], int *disponivel, int *comeco, int valor) {
         }
         lista[*disponivel].info = valor;
         *disponivel = lista[*disponivel].prox;
-        if(*disponivel == TAM -1){
+        if(lista[*disponivel].prox == -1){
             *disponivel = -1;
         }
     }
