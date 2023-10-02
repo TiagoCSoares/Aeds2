@@ -64,7 +64,6 @@ void removerDaLista(Node *lista, int *disponivel, int *comeco, int valor) {
         *disponivel = *comeco;
         *comeco = lista[*comeco].prox;
     } else {
-<<<<<<< HEAD
         while(lista[fim].prox != -1) {
             fim = lista[fim].prox;
         }
@@ -72,31 +71,10 @@ void removerDaLista(Node *lista, int *disponivel, int *comeco, int valor) {
         while(lista[anterior].prox != fim){
             if (lista[atual].info == valor) {
                 *disponivel = lista[anterior].prox;
-=======
-    while(lista[fim].prox != -1) {
-        aux = lista[fim].prox;
-        fim = aux; }
-        fim = lista[fim].prox;
-        do {
-            if(lista[atual].info == valor && atual == *comeco){
-                aux = *comeco;
-                *comeco = lista[*comeco].prox;
-                *disponivel = fim;
-            }else if(lista[atual].info == valor) {
->>>>>>> 012370927cbb1e0f03c73565f3b1df2cb5d970f1
                 lista[anterior].prox = lista[atual].prox;
             }
             anterior = atual;
             atual = lista[atual].prox;
-<<<<<<< HEAD
-=======
-        } while(lista[atual].prox != fim);
-        if(lista[atual].info == valor && lista[atual].prox == fim) {
-            lista[anterior].prox = -1;
-        }
-        if(*disponivel == -1) {
-            *disponivel = atual;
->>>>>>> 012370927cbb1e0f03c73565f3b1df2cb5d970f1
         }
     }
 }
