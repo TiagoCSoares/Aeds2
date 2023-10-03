@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 
 /**
  * Algumas funções foram deixadas incompletas.
@@ -60,26 +60,25 @@ typedef struct no_
 no *buscar(no *ptlista, int x)
 {
     no *ultimo = ptlista->ant;
-    no *atual = ptlista->prox;
-
-    if (atual == ptlista || ultimo->chave < x)
+    
+    if (ptlista == ultimo || ultimo->chave < x)
     {
-        return ptlista; // Empty list or x > last node's key
+        return ptlista;
     }
 
-    while (atual != ptlista && atual->chave <= x)
+    no *atual = ptlista->prox;
+    while (atual != ptlista)
     {
-        if (atual->chave == x)
+        if (atual->chave >= x)
         {
-            return atual; // Node with the same key found
+            return atual;
         }
         atual = atual->prox;
     }
 
-    ptlista = atual; // Node with key > x
-
     return ptlista;
 }
+
 
 /**
  * Complete a função a seguir.
@@ -95,12 +94,20 @@ no *inserir(no *ptlista, no *novo_no)
 {
     no *pont = buscar(ptlista, novo_no->chave);
 
-    /**
-     * acrescente seu código aqui.
-     */
-
-    return pont;
+    if (pont == ptlista || pont->chave != novo_no->chave)
+    {
+        novo_no->prox = pont;
+        novo_no->ant = pont->ant;
+        pont->ant->prox = novo_no;
+        pont->ant = novo_no;
+        return NULL; // Inserção bem-sucedida
+    }
+    else
+    {
+        return pont; // Não foi possível inserir
+    }
 }
+
 
 /**
  * Complete a função a seguir.
@@ -116,12 +123,16 @@ no *remover(no *ptlista, int x)
 {
     no *pont = buscar(ptlista, x);
 
-    /**
-     * acrescente seu código aqui.
-     */
-
-    return NULL;
+    if (pont != ptlista && pont->chave == x)
+    {
+        pont->ant->prox = pont->prox;
+        pont->prox->ant = pont->ant;
+        return pont; // Remoção bem-sucedida
+    }
+    
+    return NULL; // Não foi possível remover
 }
+
 
 void imprimir_crescente(no *ptlista, char *arq_saida)
 {
