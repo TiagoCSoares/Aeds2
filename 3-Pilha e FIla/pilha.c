@@ -37,36 +37,15 @@ int main() {
     char pilha[TAM];
     topo = -1;
     
-    //Mostrar lista vazia
-    imprimir(pilha, topo);
 
-    //Empilhar elementos
-    empilhar(pilha, &topo, 's');
-    empilhar(pilha, &topo, 'a');
-    empilhar(pilha, &topo, 'b');
-    empilhar(pilha, &topo, 'b');
-    empilhar(pilha, &topo, 'b');
-
-    //Mostrar a pilha com elementos
-    imprimir(pilha, topo);
-
-    //Desempilhar elementos da lista
-    char c = desempilha(pilha, &topo);
-    printf("Elemento desempilhado: %c\n", c);
-    desempilha(pilha, &topo);
-    desempilha(pilha, &topo);
-
-    //Mostrar elementos após desempilhar
-    imprimir(pilha, topo);
-    /*
     char valor;
     int opcao;
     do{
         printf("Menu de operações\n");
-        printf(0: Sair do Menu\n);
-        printf(1: Imprimir Pilha.\n);
-        printf(2: Adicionar elemento na Pilha.\n);
-        printf(3: Desempilhar elemento da Pilha.\n);
+        printf("0: Sair do Menu\n");
+        printf("1: Imprimir Pilha.\n");
+        printf("2: Adicionar elemento na Pilha.\n");
+        printf("3: Desempilhar elemento da Pilha.\n");
         scanf("%d", &opcao);
         printf("\n\n");
         switch (opcao) {
@@ -87,6 +66,6 @@ int main() {
         } 
     } while(opcao != 0);
 
-    */
+    
     return 0;
 }
