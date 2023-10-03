@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#define TAM 10
+#define TAM 8
 
 
 typedef struct _Pessoa {
@@ -9,19 +9,53 @@ typedef struct _Pessoa {
 } Pessoa;
 
 
+
+void mostraFila(Pessoa *fila, int comeco, int fim, int tamanho) {
+    if(tamanho == 0){
+        printf("Fila vazia\n");
+    } else {
+        /*printf("fim%d\n", fim);
+        int i = 0;
+        /*printf("comeco: %d\n", comeco);
+        printf("fim %d\n", fim);*/
+
+        /*for(i = comeco; i != fim; i++) {
+            printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", i, fila[i].nome, fila[i].idade);
+            if(i+1 == TAM){
+                i = -1;
+            }
+        }
+        printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", i, fila[i].nome, fila[i].idade);*/
+
+
+
+
+        //FILA CIRCULAR
+        //COMECO -> FIM
+        while(comeco != fim){
+            if(comeco == TAM) {
+                comeco = 0;
+            }
+            printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", comeco, fila[comeco].nome, fila[comeco].idade);
+            comeco+= 1;
+        }
+            printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", comeco, fila[comeco].nome, fila[comeco].idade);
+    }
+}
+
 void inserirFila(Pessoa *fila, int *comeco, int *fim, int *tamanho, Pessoa pessoa) {
     if(*tamanho == TAM) {
         printf("Lista Cheia\n"); //Queue 
     } else {
 
-        //*fim = (*fim == TAM-1) ?  : *fim + 1
+        //*fim = (*fim == TAM-1) ? 0 : *fim + 1
         if(*fim == TAM - 1){
             *fim = 0;
         }
 
         /*strcpy(fila[*fim + 1].nome, pessoa.nome);    //receber o valor de uma string em outra
         fila[*fim+1].idade = pessoa.idade;*/
-        
+
         *fim += 1;
         fila[*fim] = pessoa;
         *tamanho += 1;
@@ -29,18 +63,29 @@ void inserirFila(Pessoa *fila, int *comeco, int *fim, int *tamanho, Pessoa pesso
 }
 
 
-
-
-
-void removerFila(Pessoa *fila, int *comeco, int *fim, int *tamanho, Pessoa pessoa) {
-
-
+Pessoa* retiraDaFila(Pessoa *fila, int *comeco, int *tamanho) {
+    if(*tamanho == 0) {
+        printf("Lista vazia\n");
+        return NULL;
+    }
+    *tamanho = *tamanho - 1;
+    int aux = *comeco;
+    *comeco = (*comeco == TAM-1) ? 0 : *comeco +1;
     
-
-
-
-
+    return fila;
 }
+
+void removerFila(Pessoa *fila, int *comeco, int *tamanho) {
+    if(*tamanho == 0){
+        printf("Lista vazia\n");
+    }   else{ 
+        *comeco = (*comeco == TAM-1) ? 0 : *comeco +1;
+        *tamanho--;
+    }
+}
+
+
+
 
 int main() {
     int comeco = 0;
@@ -54,17 +99,52 @@ int main() {
 
     Pessoa pessoa2 = {"Nome", 30};
     inserirFila(fila, &comeco, &fim, &tamanho, pessoa2);
+
+    Pessoa pessoa3 = {"Nome", 301};
+    inserirFila(fila, &comeco, &fim, &tamanho, pessoa3);
+
+    Pessoa pessoa4 = {"Nome", 310};
+    inserirFila(fila, &comeco, &fim, &tamanho, pessoa4);
+
+
+    Pessoa pessoa5 = {"Nome", 3120};
+    inserirFila(fila, &comeco, &fim, &tamanho, pessoa5);
+
+
+    Pessoa pessoa6 = {"Nome", 7370};
+    inserirFila(fila, &comeco, &fim, &tamanho, pessoa6);
+
+
+    Pessoa pessoa7 = {"Nome", 830};
+    inserirFila(fila, &comeco, &fim, &tamanho, pessoa7);
+
+
+    Pessoa pessoa8 = {"Nome", 930};
+    inserirFila(fila, &comeco, &fim, &tamanho, pessoa8);
+
+
+    Pessoa pessoa9 = {"Nome", 0};
+    inserirFila(fila, &comeco, &fim, &tamanho, pessoa9);
+
+
+
      
-    printf("fila[0].nome = %s, fila[0].idade = %d\n", fila[0].nome, fila[0].idade);
-    printf("fila[1].nome = %s, fila[1].idade = %d\n", fila[1].nome, fila[1].idade); 
+    /*printf("fila[0].nome = %s, fila[0].idade = %d\n", fila[0].nome, fila[0].idade);
+    printf("fila[1].nome = %s, fila[1].idade = %d\n", fila[1].nome, fila[1].idade); */
+
+    //printf("fila[1].nome = %s, fila[1].idade = %d\n", fila[7].nome, fila[7].idade); 
+    //printf("fila[1].nome = %s, fila[1].idade = %d\n", fila[8].nome, fila[8].idade); 
+
+    //removerFila(fila, &comeco, &tamanho);
+
+    mostraFila(fila, comeco, fim, tamanho);
+
+    Pessoa *p1 = retiraDaFila(fila, &comeco, &tamanho);
+    printf("nome: %s \t idade: %d\n", p1->nome, p1->idade);
 
 
-
-
-
-
-
-
+    Pessoa *p2 = retiraDaFila(fila, &comeco, &tamanho);
+    printf("nome: %s \t idade: %d\n", p1->nome, p1->idade);
     /*
     int opcao;
     do{
@@ -79,6 +159,7 @@ int main() {
 
         switch (opcao) {
             case 1:
+                inserirFIla(&fila, &comeco, &fim, &tamanho, pessoa);
                 break;
             case 2: 
                 break;
