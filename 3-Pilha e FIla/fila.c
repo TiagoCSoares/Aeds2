@@ -15,17 +15,16 @@ void mostraFila(Pessoa *fila, int comeco, int fim, int tamanho) {
         printf("Fila vazia\n");
     } else {
         /*printf("fim%d\n", fim);
-        int i = 0;
         /*printf("comeco: %d\n", comeco);
         printf("fim %d\n", fim);*/
 
-        /*for(i = comeco; i != fim; i++) {
-            printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", i, fila[i].nome, fila[i].idade);
-            if(i+1 == TAM){
-                i = -1;
+        /*while(comeco != fim){
+            printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", comeco, fila[comeco].nome, fila[comeco].idade);
+            if(comeco+1 == TAM){
+                comeco = -1;
             }
         }
-        printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", i, fila[i].nome, fila[i].idade);*/
+        printf("Pessoa #%d \t Nome: %s \t Idade: %d\n", comeco, fila[comeco].nome, fila[comeco].idade);*/
 
 
 

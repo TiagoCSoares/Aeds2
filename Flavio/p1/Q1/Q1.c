@@ -62,21 +62,15 @@ no *buscar(no *ptlista, int x)
     no *ultimo = ptlista->ant;
     no *atual = ptlista->prox;
 
-    if (atual == ptlista || ultimo->chave < x)
-    {
-        return ptlista; // Empty list or x > last node's key
-    }
-
-    while (atual != ptlista && atual->chave <= x)
-    {
-        if (atual->chave == x)
-        {
-            return atual; // Node with the same key found
-        }
+    while(atual != ptlista && atual->chave <= x){
+        if(atual->chave >= x){
+            return atual;
+        } 
         atual = atual->prox;
     }
-
-    ptlista = atual; // Node with key > x
+    if(atual->chave >= x){
+        return atual;
+    }
 
     return ptlista;
 }
@@ -95,9 +89,14 @@ no *inserir(no *ptlista, no *novo_no)
 {
     no *pont = buscar(ptlista, novo_no->chave);
 
-    /**
-     * acrescente seu código aqui.
-     */
+    //inserção
+    if(pont->chave < novo_no->chave){
+        novo_no = pont->prox;
+        novo_no->ant = pont;
+        pont->prox = novo_no;
+        novo_no->prox->ant = novo_no;
+        return NULL; 
+        }
 
     return pont;
 }
@@ -116,9 +115,11 @@ no *remover(no *ptlista, int x)
 {
     no *pont = buscar(ptlista, x);
 
-    /**
-     * acrescente seu código aqui.
-     */
+    if(pont->chave == x){
+        pont->ant->prox = pont->prox;
+        pont->prox->ant = pont->ant;
+        return pont;
+    }
 
     return NULL;
 }
