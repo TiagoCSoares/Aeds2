@@ -62,14 +62,14 @@ no *buscar(no *ptlista, int x)
     no *ultimo = ptlista->ant;
     no *atual = ptlista->prox;
 
-    while(atual != ptlista && atual->chave <= x){
-        if(atual->chave >= x){
-            return atual;
+    while(ultimo->prox != ptlista && ultimo->prox->chave <= x){
+        if(ultimo->prox->chave >= x){
+            return ultimo->prox;
         } 
-        atual = atual->prox;
+        ultimo = ultimo->prox;
     }
-    if(atual->chave >= x){
-        return atual;
+    if(ultimo->prox->chave == x){
+        return ultimo->prox;
     }
 
     return ptlista;

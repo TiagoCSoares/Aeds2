@@ -1,29 +1,16 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-typedef struct no_
-{
-    int chave;
-    int valor;
-    struct no_ *ant;
-    struct no_ *prox;
-} no;
+int main () {
+    int a = 10;
+    int *pont_a = &a;
+    int **pont_a2 = &pont_a; 
 
 
-void inicia_lista(no **ptlista)
-{
-    *ptlista = malloc(sizeof(no));
+    printf("var a: %p\n", &a);
+    printf("var a: %d\n", a);
+    printf("pont pont_a: %p\n", pont_a);
+    printf("pont pont_a: %d\n", *pont_a);
+    printf("pont pont_a2: %p\n", pont_a2);
+    printf("pont pont_a2: %d\n", *pont_a);
 
-    (*(*ptlista)).ant = (*ptlista);
-    (*(*ptlista)).prox = (*ptlista);
-}
-
-void main(int argc, char **argv)
-{
-    no *ptlista;
-    inicia_lista(&ptlista);
-
-    printf("ptlista: %p\n", ptlista);
-    printf("ptlista->ant: %p\n", (*ptlista).ant);
-    printf("ptlista->prox: %p\n", ptlista->prox);
 }
