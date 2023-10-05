@@ -59,20 +59,41 @@ typedef struct no_
  */
 no *buscar(no *ptlista, int x)
 {
-    no *ultimo = ptlista->ant;
+    /*no *ultimo = ptlista->ant;  //ptlista->ant == ptlista
     no *atual = ptlista->prox;
-
-    while(ultimo->prox != ptlista && ultimo->prox->chave <= x){
-        if(ultimo->prox->chave >= x){
-            return ultimo->prox;
-        } 
-        ultimo = ultimo->prox;
+    while(atual != ptlista && atual->chave <= x){         
+        if(atual->chave == x){
+            return atual;
+        }
+       atual = atual->prox;
     }
-    if(ultimo->prox->chave == x){
-        return ultimo->prox;
+
+    return ptlista;*/
+
+
+
+    /*no *ultimo = ptlista->ant;  //ptlista->ant == ptlista
+    no *atual = ptlista->prox;
+    while(ultimo->prox->prox != ptlista && ultimo->prox->prox->chave <= x){         
+        if(ultimo->prox->prox->chave == x){
+            return ultimo->prox->prox;
+        }
+       ultimo = ultimo->prox
+    }
+
+    return ptlista;*/
+
+    no *ultimo = ptlista->ant;  //ptlista->ant == ptlista
+    no *atual = ultimo->prox;
+    while(atual->prox != ptlista && atual->prox->chave <= x){         
+        if(atual->prox->chave == x){
+            return atual->prox;
+        }
+       atual = atual->prox;
     }
 
     return ptlista;
+    
 }
 
 /**
@@ -90,11 +111,22 @@ no *inserir(no *ptlista, no *novo_no)
     no *pont = buscar(ptlista, novo_no->chave);
 
     //inserção
-    if(pont->chave < novo_no->chave){
-        novo_no = pont->prox;
-        novo_no->ant = pont;
-        pont->prox = novo_no;
-        novo_no->prox->ant = novo_no;
+    if(pont == ptlista || pont->chave != novo_no->chave){
+        /*if(pont->chave < novo_no->chave){
+            novo_no->prox = pont->prox;
+            novo_no->ant = pont;
+            pont->prox->ant = novo_no;
+            pont->prox = novo_no;
+        } else if(pont->chave > novo_no->chave) {
+            novo_no->prox = pont;
+            novo_no->ant = pont->ant;
+            pont->ant->prox = novo_no;
+            pont->ant = novo_no;
+        }*/
+        novo_no->prox = pont;
+        novo_no->ant = pont->ant;
+        pont->ant->prox = novo_no;
+        pont->ant = novo_no;
         return NULL; 
         }
 
@@ -115,7 +147,7 @@ no *remover(no *ptlista, int x)
 {
     no *pont = buscar(ptlista, x);
 
-    if(pont->chave == x){
+    if(pont->chave == x && pont != ptlista){
         pont->ant->prox = pont->prox;
         pont->prox->ant = pont->ant;
         return pont;
