@@ -3,6 +3,7 @@
 #include <string.h>
 
 /**
+ * O presente programa tem como objetivo implementar uma lista duplamente encadeada.
  * Algumas funções foram deixadas incompletas.
  * Seu trabalho é completá-las de modo que o programa funcione da maneira esperada.
  *
@@ -40,60 +41,20 @@ typedef struct no_
     struct no_ *prox;
 } no;
 
-/**
- * Complete a função a seguir.
- * Ela deve retornar uma das seguintes opções:
- *  - cenários de inserção:
- *    -> se a lista estiver vazia, ou a chave do nó a ser inserido for
- *       maior do que a chave do último nó da lista:
- *          --> retorna ptlista
- *    -> se ao percorrer a lista você encontrar um nó interno cuja chave
- *       é maior do que a chave do nó a ser inserido:
- *          --> retorna o endereço do nó interno
- *  - cenário de não inserção
- *    -> se ao percorrer a lista você encontrar um nó interno cuja chave
- *       seja igual a chave chave do nó a ser inserido:
- *          --> retorna o endereço do nó interno
- *
- * Sua função deve ter no máximo 5 ; (ponto e vírgula).
- */
 no *buscar(no *ptlista, int x)
 {
-    /*no *ultimo = ptlista->ant;  //ptlista->ant == ptlista
-    no *atual = ptlista->prox;
-    while(atual != ptlista && atual->chave <= x){         
-        if(atual->chave == x){
-            return atual;
+    no *ultimo = ptlista->ant;
+
+    if (ultimo != ptlista && x <= ultimo->chave)
+    {
+        no *pont = ptlista->prox;
+        while (pont->chave < x)
+        {
+            pont = pont->prox;
         }
-       atual = atual->prox;
+        return pont;
     }
-
-    return ptlista;*/
-
-
-
-    /*no *ultimo = ptlista->ant;  //ptlista->ant == ptlista
-    no *atual = ptlista->prox;
-    while(ultimo->prox->prox != ptlista && ultimo->prox->prox->chave <= x){         
-        if(ultimo->prox->prox->chave == x){
-            return ultimo->prox->prox;
-        }
-       ultimo = ultimo->prox;
-    }
-
-    return ptlista;*/
-
-    no *ultimo = ptlista->ant;  //ptlista->ant == ptlista
-    no *atual = ultimo->prox;
-    while(atual->prox != ptlista && atual->prox->chave <= x){         
-        if(atual->prox->chave == x){
-            return atual->prox;
-        }
-       atual = atual->prox;
-    }
-
     return ptlista;
-    
 }
 
 /**
@@ -104,32 +65,20 @@ no *buscar(no *ptlista, int x)
  *  - caso não ocorra a inserção:
  *      --> retorna o endereço retornado pela função buscar
  *
- * Sua função deve ter no máximo 7 ; (ponto e vírgula).
+ * Sua função deve ter no máximo 9 ; (ponto e vírgula).
  */
 no *inserir(no *ptlista, no *novo_no)
 {
     no *pont = buscar(ptlista, novo_no->chave);
 
-    //inserção
     if(pont == ptlista || pont->chave != novo_no->chave){
-        /*if(pont->chave < novo_no->chave){
-            novo_no->prox = pont->prox;
-            novo_no->ant = pont;
-            pont->prox->ant = novo_no;
-            pont->prox = novo_no;
-        } else if(pont->chave > novo_no->chave) {
-            novo_no->prox = pont;
-            novo_no->ant = pont->ant;
-            pont->ant->prox = novo_no;
-            pont->ant = novo_no;
-        }*/
         novo_no->prox = pont;
         novo_no->ant = pont->ant;
         pont->ant->prox = novo_no;
         pont->ant = novo_no;
         return NULL; 
         }
-
+        
     return pont;
 }
 
@@ -141,7 +90,7 @@ no *inserir(no *ptlista, no *novo_no)
  *  - caso não ocorra a remoção (nó não encontrado):
  *      --> NULL
  *
- * Sua função deve ter no máximo 5 ; (ponto e vírgula).
+ * Sua função deve ter no máximo 7 ; (ponto e vírgula).
  */
 no *remover(no *ptlista, int x)
 {
@@ -152,6 +101,7 @@ no *remover(no *ptlista, int x)
         pont->prox->ant = pont->ant;
         return pont;
     }
+
 
     return NULL;
 }
@@ -269,6 +219,7 @@ void main(int argc, char **argv)
         {
             // sair
             desalocar_lista(ptlista);
+            fclose(entrada);
             return;
         }
         else if (resposta == 1)
@@ -302,10 +253,5 @@ void main(int argc, char **argv)
             // imprimir ordem decrescente
             imprimir_decrescente(ptlista, arq_saida);
         }
-        else
-        {
-            printf("Opção inválida\n");
-        }
     }
-    fclose(entrada);
 }
