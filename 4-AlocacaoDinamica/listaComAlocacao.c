@@ -5,12 +5,14 @@
 
 
 typedef struct no {
+    struct no *ant;
     int info;
     struct no *prox;
 } Node;
 
 typedef struct {
     struct no *comeco;
+    struct no *fim;
 } Lista;
 
 // Iniciar a lista
