@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define TRUE 1
+#define FALSE 0
+
 typedef struct no{
     int info;
     struct no *esq;
@@ -36,16 +39,100 @@ Node* insere (Node *raiz, int valor){
 
 //TODO: Mostrar a árvore
 //Notações: Pré-Ordem, Em-ordem e Pós-ordem
+void mostraArvorePreOrdem(Node *raiz) {
+    //printf("%d \t", raiz->info);
+    if(raiz != NULL) { //if (raiz)
+        printf("%d \t", raiz->info);
+        mostraArvorePreOrdem(raiz->esq);
+        mostraArvorePreOrdem(raiz->dir);
+    }
+}
 
 
+void mostraArvoreEmOrdem(Node *raiz) {
+    //printf("%d \t", raiz->info);
+    if(raiz != NULL) { //if (raiz)
+        mostraArvoreEmOrdem(raiz->esq);
+        printf("%d \t", raiz->info);
+        mostraArvoreEmOrdem(raiz->dir);
 
+    }
+}
+
+
+void mostraArvorePosOrdem(Node *raiz) {
+    //printf("%d \t", raiz->info);
+    if(raiz != NULL) { //if (raiz)
+        mostraArvorePosOrdem(raiz->esq);
+        mostraArvorePosOrdem(raiz->dir);
+        printf("%d \t", raiz->info);
+    }
+}
+
+
+/*raiz->info = valor;
+            raiz->esq = raiz->esq->esq;
+            raiz->dir = raiz->dir->dir;*/
 //TODO: Remover da árvore
 //DECISÃO: Maior item subárvore ou menor item subárvore direita
+int remover(Node *raiz, int valor) {
+    if (raiz == NULL) {
+        return FALSE;
+    }
 
+    if (raiz->info == valor) {
+        if(raiz->esq == NULL && raiz->dir == NULL){
+            raiz = NULL;
+        }
+        else if (raiz->esq == NULL) {
+            Node *aux = raiz->dir->esq;
+            Node *ant = raiz->dir;
+            while (aux != NULL) {
+                ant = aux;
+                aux = aux->esq;
+            }
+            raiz->info = ant->info;
+            ant = NULL;
+        }
+        else {
+            Node *aux = raiz->dir->esq;
+            Node *ant = raiz->dir;
+            while (aux != NULL) {
+                ant = aux;
+                aux = aux->esq;
+            }
+            raiz->info = ant->info;
+            ant = NULL;
+        }
+        return TRUE;
+    }   /*else {
+        if(raiz->info > valor) {
+            remover(raiz->esq, valor);
+        }   else {
+            remover(raiz->dir, valor);
+        }
+    }
+*/
+}
 
 
 
 //TODO: Buscar elemento na árvore O(log n)
+int busca(Node *raiz, int valor) {
+    if(raiz == NULL) {
+        return FALSE;
+    }
+    if(raiz->info == valor) {
+        return TRUE;
+    }
+    if(raiz->info > valor){
+        busca(raiz->esq, valor);
+    } else {
+        busca(raiz->dir, valor);
+    }
+}
+
+
 
 int main() {
     //Podemos suprimir a função "inicia" / "iniciaArvore" com essa declaração 
@@ -54,7 +141,31 @@ int main() {
     
     raiz = insere(raiz, 50);
     raiz = insere(raiz, 30);
+    raiz = insere(raiz, 30);
     raiz = insere(raiz, 60);
+    raiz = insere(raiz, 80);
+    raiz = insere(raiz, 20);
+    raiz = insere(raiz, 45);
+    raiz = insere(raiz, 90);
+    raiz = insere(raiz, 75);
+    mostraArvorePreOrdem(raiz);
+    printf("\n");
+    mostraArvoreEmOrdem(raiz);
+    printf("\n");
+    mostraArvorePosOrdem(raiz);
+    printf("\n");
+    int cade = busca(raiz,90);
+    printf("Item foi encontrado? %d", cade);
+    printf("\n");
+    int sumiu = remover(raiz, 50);
+    printf("Item foi removido? %d", cade);
+    printf("\n");
+    mostraArvorePreOrdem(raiz);
+    printf("\n");
+    mostraArvoreEmOrdem(raiz);
+    printf("\n");
+    mostraArvorePosOrdem(raiz);
+    printf("\n");
     //printf("O valor da informação é: %d \n", raiz->info);
 
     return 0;
