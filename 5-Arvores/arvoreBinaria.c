@@ -75,7 +75,7 @@ void mostraArvorePosOrdem(Node *raiz) {
             raiz->dir = raiz->dir->dir;*/
 //TODO: Remover da árvore
 //DECISÃO: Maior item subárvore ou menor item subárvore direita
-int remover(Node *raiz, int valor) {
+/*int remover(Node *raiz, int valor) {
     if (raiz == NULL) {
         return FALSE;
     }
@@ -92,27 +92,62 @@ int remover(Node *raiz, int valor) {
                 aux = aux->esq;
             }
             raiz->info = ant->info;
+            ant->esq = NULL;
             ant = NULL;
         }
         else {
-            Node *aux = raiz->dir->esq;
-            Node *ant = raiz->dir;
-            while (aux != NULL) {
+            int cont = 0;
+            Node *aux = raiz->esq;
+            Node *ant = raiz->esq;
+            while (aux->dir != NULL) {
                 ant = aux;
-                aux = aux->esq;
+                aux = aux->dir;
+                cont++;
             }
-            raiz->info = ant->info;
-            ant = NULL;
+            if(cont == 0) {
+                raiz->esq = NULL;
+            }
+            raiz->info = aux->info;
+            ant->dir = NULL;
         }
         return TRUE;
-    }   /*else {
+    }   else {
         if(raiz->info > valor) {
             remover(raiz->esq, valor);
         }   else {
             remover(raiz->dir, valor);
         }
     }
+
+}
 */
+Node* remover(Node *raiz, int valor) {
+    if (raiz == NULL) {
+        return raiz;
+    }
+
+    if (raiz->info == valor) {
+        if(raiz->esq == NULL && raiz->dir == NULL){
+            free(raiz);
+            return NULL;
+        }
+        if(raiz->esq == NULL) {
+            Node *aux = raiz->dir;
+            Node *ant = raiz->dir;
+            while(aux != NULL) {
+                ant = aux;
+                aux = aux->esq;
+            }
+            raiz->info = ant->info;
+            
+            ;
+        }
+
+    } else if(raiz->info > valor) {
+        raiz->esq = remover(raiz->esq, valor);
+    } else {
+        raiz->dir = remover(raiz->dir, valor);
+    }
 }
 
 
@@ -141,7 +176,7 @@ int main() {
     
     raiz = insere(raiz, 50);
     raiz = insere(raiz, 30);
-    raiz = insere(raiz, 30);
+    //raiz = insere(raiz, 30);
     raiz = insere(raiz, 60);
     raiz = insere(raiz, 80);
     raiz = insere(raiz, 20);
@@ -154,11 +189,11 @@ int main() {
     printf("\n");
     mostraArvorePosOrdem(raiz);
     printf("\n");
-    int cade = busca(raiz,90);
-    printf("Item foi encontrado? %d", cade);
+    //int cade = busca(raiz,90);
+    //printf("Item foi encontrado? %d", cade);
     printf("\n");
-    int sumiu = remover(raiz, 50);
-    printf("Item foi removido? %d", cade);
+    //int sumiu = remover(raiz, 45);
+    //printf("Item foi removido? %d", cade);
     printf("\n");
     mostraArvorePreOrdem(raiz);
     printf("\n");
