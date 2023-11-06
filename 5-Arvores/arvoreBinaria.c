@@ -22,7 +22,7 @@ Node* insere (Node *raiz, int valor){
     if(raiz == NULL) {
         raiz = node;
     } else {
-        Node* aux = raiz;
+
         if(raiz->info > valor) {
             raiz->esq = insere(raiz->esq, valor);
         }
@@ -69,58 +69,6 @@ void mostraArvorePosOrdem(Node *raiz) {
     }
 }
 
-
-/*raiz->info = valor;
-            raiz->esq = raiz->esq->esq;
-            raiz->dir = raiz->dir->dir;*/
-//TODO: Remover da árvore
-//DECISÃO: Maior item subárvore ou menor item subárvore direita
-/*int remover(Node *raiz, int valor) {
-    if (raiz == NULL) {
-        return FALSE;
-    }
-
-    if (raiz->info == valor) {
-        if(raiz->esq == NULL && raiz->dir == NULL){
-            raiz = NULL;
-        }
-        else if (raiz->esq == NULL) {
-            Node *aux = raiz->dir->esq;
-            Node *ant = raiz->dir;
-            while (aux != NULL) {
-                ant = aux;
-                aux = aux->esq;
-            }
-            raiz->info = ant->info;
-            ant->esq = NULL;
-            ant = NULL;
-        }
-        else {
-            int cont = 0;
-            Node *aux = raiz->esq;
-            Node *ant = raiz->esq;
-            while (aux->dir != NULL) {
-                ant = aux;
-                aux = aux->dir;
-                cont++;
-            }
-            if(cont == 0) {
-                raiz->esq = NULL;
-            }
-            raiz->info = aux->info;
-            ant->dir = NULL;
-        }
-        return TRUE;
-    }   else {
-        if(raiz->info > valor) {
-            remover(raiz->esq, valor);
-        }   else {
-            remover(raiz->dir, valor);
-        }
-    }
-
-}
-*/
 Node* remover(Node *raiz, int valor) {
     if (raiz == NULL) {
         return raiz;
@@ -133,21 +81,38 @@ Node* remover(Node *raiz, int valor) {
         }
         if(raiz->esq == NULL) {
             Node *aux = raiz->dir;
-            Node *ant = raiz->dir;
-            while(aux != NULL) {
-                ant = aux;
-                aux = aux->esq;
-            }
-            raiz->info = ant->info;
-            
-            ;
+            free(raiz);
+            return aux;
+        }
+        if(raiz->dir == NULL) {
+            Node* aux = raiz->esq;
+            free(raiz);
+            return aux;
+        }
+        Node *aux = raiz->esq;
+        Node *ant = aux;
+
+        while(aux->dir != NULL) {
+            ant = aux;
+            aux = aux->dir;
+        }
+        if(aux->esq != NULL && aux != ant){
+            ant->dir = aux->esq;
+        } else if (aux != ant) { ant->dir = NULL;}
+        aux->dir = raiz->dir;
+        aux->esq = raiz->esq;
+        if(ant == aux) {
+            aux->esq = NULL;
         }
 
+        free(raiz);
+        return aux;
     } else if(raiz->info > valor) {
         raiz->esq = remover(raiz->esq, valor);
     } else {
         raiz->dir = remover(raiz->dir, valor);
     }
+    return raiz;
 }
 
 
@@ -192,8 +157,8 @@ int main() {
     //int cade = busca(raiz,90);
     //printf("Item foi encontrado? %d", cade);
     printf("\n");
-    //int sumiu = remover(raiz, 45);
-    //printf("Item foi removido? %d", cade);
+    raiz = remover(raiz, 90);
+    
     printf("\n");
     mostraArvorePreOrdem(raiz);
     printf("\n");
