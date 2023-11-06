@@ -132,22 +132,67 @@ int busca(Node *raiz, int valor) {
     }
 }
 
+int grau(Node *raiz, int valor) {
+    if (raiz == NULL) {
+        return -1;
+    }
+    int valorExiste = busca(raiz, valor);
+    if (valorExiste == FALSE) {
+        return -1;
+    }
+    if(raiz->info == valor) {
+        if(raiz->esq && raiz->dir) {
+            return 2;
+        }
+    
+        if(raiz->esq == NULL && raiz->dir == NULL) {
+            return 0;
+        }
+        return 1;
+    }
+    if (raiz->info < valor) {
+        return grau(raiz->dir, valor);
+    }
+    return grau(raiz->esq, valor);
+} 
 
+
+// nivel(raiz, _, 0)
+int nivel(Node *raiz, int valor, int contador) {
+    if(!raiz){
+        return 0;
+    }
+    if(raiz->info == valor) {
+        return contador;
+    }
+    if(raiz->info > valor) {
+        return nivel(raiz->esq, valor, contador + 1);
+    }
+    return nivel(raiz->dir, valor, contador + 1);
+
+}
 
 int main() {
     //Podemos suprimir a função "inicia" / "iniciaArvore" com essa declaração 
     //Node *raiz = (Node *) malloc(sizeof(Node));
     Node *raiz = NULL;
     
-    raiz = insere(raiz, 50);
-    raiz = insere(raiz, 30);
+    raiz = insere(raiz, 8);
+    raiz = insere(raiz, 4);
     //raiz = insere(raiz, 30);
-    raiz = insere(raiz, 60);
-    raiz = insere(raiz, 80);
-    raiz = insere(raiz, 20);
-    raiz = insere(raiz, 45);
-    raiz = insere(raiz, 90);
-    raiz = insere(raiz, 75);
+    raiz = insere(raiz, 2);
+    raiz = insere(raiz, 1);
+    raiz = insere(raiz, 3);
+    raiz = insere(raiz, 6);
+    raiz = insere(raiz, 5);
+    raiz = insere(raiz, 7);
+    raiz = insere(raiz, 12);
+    raiz = insere(raiz, 10);
+    raiz = insere(raiz, 11);
+    raiz = insere(raiz, 14);
+    raiz = insere(raiz, 15);
+    raiz = insere(raiz, 13);
+    raiz = insere(raiz, 17);
     mostraArvorePreOrdem(raiz);
     printf("\n");
     mostraArvoreEmOrdem(raiz);
@@ -167,6 +212,22 @@ int main() {
     mostraArvorePosOrdem(raiz);
     printf("\n");
     //printf("O valor da informação é: %d \n", raiz->info);
+
+
+    int lakaka = grau(raiz, 30); 
+    printf("o grau do noh eh %d\n", lakaka);
+    lakaka = nivel(raiz,17, 0);
+    printf("%d\n", lakaka);
+
+
+    int array[15] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+
+    int valor = 0;
+    for(int i = 0; i< 15; i++) {
+        if(array[i] == valor) {
+            printf("encontrado em %d iterações\n", i);
+        } else {printf("não encontrado\n");}
+    }
 
     return 0;
 }
