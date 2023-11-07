@@ -179,20 +179,20 @@ int main() {
     
     raiz = insere(raiz, 8);
     raiz = insere(raiz, 4);
-    //raiz = insere(raiz, 30);
+    raiz = insere(raiz, 12);
     raiz = insere(raiz, 2);
     raiz = insere(raiz, 1);
     raiz = insere(raiz, 3);
     raiz = insere(raiz, 6);
     raiz = insere(raiz, 5);
     raiz = insere(raiz, 7);
-    raiz = insere(raiz, 12);
     raiz = insere(raiz, 10);
-    raiz = insere(raiz, 11);
     raiz = insere(raiz, 14);
-    raiz = insere(raiz, 15);
+    raiz = insere(raiz, 9);
+    raiz = insere(raiz, 11);
     raiz = insere(raiz, 13);
-    raiz = insere(raiz, 17);
+    raiz = insere(raiz, 15);
+    //raiz = insere(raiz, 17);
     mostraArvorePreOrdem(raiz);
     printf("\n");
     mostraArvoreEmOrdem(raiz);
