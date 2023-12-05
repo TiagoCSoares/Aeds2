@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TAM 1000
+#define TAM 10
 
 typedef struct firstCome {
     int unidadeTempo;
@@ -10,16 +10,11 @@ typedef struct firstCome {
 
 
 typedef struct firstJob {
+    int processo;
     int unidadeTempo;
-    //struct fj;
+    struct firstJob *prox;
 } fj;
 
-
-fj ordenaFJ(fj *no) {
-    fj aux = *no;
-    fj node = *no;
-    return *no;
-}
 
 
 int trinta() {
@@ -38,31 +33,94 @@ int geraAleatorio(){
 }
 
 
+//void insereOrdenado(fj *node, fj *fila) 
+//{
+//    fj *novo = node;
+//    fj *raiz = fila;
+//    fj *ant;
+//    while (raiz->prox != NULL && raiz->unidadeTempo <= node->unidadeTempo) {
+//        ant = raiz;
+//        raiz = raiz->prox;
+//    }
+//
+//    if (raiz->prox == NULL) {
+//        raiz->prox = node;
+//    } else {
+//        ant->prox = novo;
+//        novo->prox = raiz;
+//    }
+//}
+//
+//int firstJob() {
+//    int iteracoes = 0;
+//    int numero_processos = 1;
+//    int tam_aux = 1;
+//    int _30;
+//    fj *fila = NULL;
+//
+//    fila->processo = numero_processos;
+//    fila->unidadeTempo = geraAleatorio;
+//    fila->prox = NULL;
+//    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\n",  iteracoes, fila->processo, fila->unidadeTempo);
+//    iteracoes++;
+//
+//    while(fila->unidadeTempo > 0) {
+//
+//            _30 = trinta();
+//            if(_30 == 1 && tam_aux <= TAM){
+//                fj *node = (fj*)malloc(sizeof(fj));
+//                node->processo = numero_processos;
+//                node->unidadeTempo = geraAleatorio();
+//                insereOrdenado(node, &fila);
+//                tam_aux++;
+//                numero_processos++;
+//            }
+//
+//            //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
+//            fila->unidadeTempo--;
+//            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\n",  iteracoes, fila->processo, fila->unidadeTempo,fila->prox->processo, fila->prox->unidadeTempo);
+//
+//            if(fila->unidadeTempo == 0) {
+//                fila = fila->prox;
+//            }
+//            iteracoes++;
+//        }
+//    
+//    return numero_processos-1;
+//}
+
+
 int firstCome() {
+
+    //TODO: Retirar o tamanho fixo da lista
     int iteracoes = 0;
     int numero_processos = 1;
     int tamanho = 0;
     int tam_aux = 1;
     int _30;
     fcfs fila[TAM];
+    int inicio = 0;
+    int fim = 0;
     fila[tamanho].processo = numero_processos;
     numero_processos++;
     fila[tamanho].unidadeTempo = geraAleatorio();
-    printf("Iteração:%d\tID_processo:%d\tUnidadeTempo:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
+    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
     iteracoes++;
 
-    while(fila[tamanho].unidadeTempo >= 0 && tamanho < TAM) {
+    //TODO: Loop infinito (?)
+    while(fila[tamanho].unidadeTempo > 0 && tamanho <= TAM) {
 
         _30 = trinta();
-        if(_30 == 1 && tam_aux < TAM){
+        if(_30 == 1 && tam_aux <= TAM){
             fila[tam_aux].processo = numero_processos;
             fila[tam_aux].unidadeTempo = geraAleatorio();
             tam_aux++;
             numero_processos++;
         }
 
+        //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
         fila[tamanho].unidadeTempo--;
-        printf("Iteração:%d\tID_processo:%d\tUnidadeTempo:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
+        printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo,fila[tamanho+1].processo, fila[tamanho+1].unidadeTempo);
 
         if(fila[tamanho].unidadeTempo == 0) {
             tamanho++;
@@ -74,10 +132,6 @@ int firstCome() {
 }
 
 
-int firstJob() {
-
-
-}
 
 int main() {
 
@@ -96,15 +150,12 @@ int main() {
         switch (define) {
             case 1:
                 int lakaka = firstCome();
-                printf("%d\n", lakaka);
                 break;
             case 2:
                 a = geraAleatorio();
-                printf("%d", a);
                 break;
             case 3:
                 a = geraAleatorio();
-                    printf("%d", a);
                     break;
             case 0:
                 printf("Saindo do programa");
@@ -117,6 +168,7 @@ int main() {
         */
     int lakaka = firstCome();
     printf("\n%d\n", lakaka);
-
+    //int lakaka2 = firstJob();
+    //printf("\n%d\n", lakaka2);
     return 0;
 }
