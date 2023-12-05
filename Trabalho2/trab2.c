@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TAM 100
+#define TAM 1000
 
 typedef struct firstCome {
     int unidadeTempo;
-    //struct fcfs;
+    int processo;
 } fcfs;
+
+
 
 typedef struct firstJob {
     int unidadeTempo;
-    struct fj;
+    //struct fj;
 } fj;
 
 
@@ -37,32 +39,38 @@ int geraAleatorio(){
 
 
 int firstCome() {
+    int iteracoes = 0;
     int numero_processos = 1;
     int tamanho = 0;
     int tam_aux = 1;
     int _30;
     fcfs fila[TAM];
+    fila[tamanho].processo = numero_processos;
+    numero_processos++;
     fila[tamanho].unidadeTempo = geraAleatorio();
-    printf("%d\t", fila[0].unidadeTempo);
+    printf("Iteração:%d\tID_processo:%d\tUnidadeTempo:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
+    iteracoes++;
 
     while(fila[tamanho].unidadeTempo >= 0 && tamanho < TAM) {
 
         _30 = trinta();
         if(_30 == 1 && tam_aux < TAM){
+            fila[tam_aux].processo = numero_processos;
             fila[tam_aux].unidadeTempo = geraAleatorio();
-            printf("%d\t", fila[tam_aux].unidadeTempo);
             tam_aux++;
             numero_processos++;
         }
 
         fila[tamanho].unidadeTempo--;
+        printf("Iteração:%d\tID_processo:%d\tUnidadeTempo:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
 
         if(fila[tamanho].unidadeTempo == 0) {
             tamanho++;
         }
+        iteracoes++;
     }
     
-    return numero_processos;
+    return numero_processos-1;
 }
 
 
