@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TAM 10
+#define TAM 1000000
 
 typedef struct firstCome {
     int unidadeTempo;
@@ -33,61 +33,68 @@ int geraAleatorio(){
 }
 
 
-//void insereOrdenado(fj *node, fj *fila) 
-//{
-//    fj *novo = node;
-//    fj *raiz = fila;
-//    fj *ant;
-//    while (raiz->prox != NULL && raiz->unidadeTempo <= node->unidadeTempo) {
-//        ant = raiz;
-//        raiz = raiz->prox;
-//    }
-//
-//    if (raiz->prox == NULL) {
-//        raiz->prox = node;
-//    } else {
-//        ant->prox = novo;
-//        novo->prox = raiz;
-//    }
-//}
-//
-//int firstJob() {
-//    int iteracoes = 0;
-//    int numero_processos = 1;
-//    int tam_aux = 1;
-//    int _30;
-//    fj *fila = NULL;
-//
-//    fila->processo = numero_processos;
-//    fila->unidadeTempo = geraAleatorio;
-//    fila->prox = NULL;
-//    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\n",  iteracoes, fila->processo, fila->unidadeTempo);
-//    iteracoes++;
-//
-//    while(fila->unidadeTempo > 0) {
-//
-//            _30 = trinta();
-//            if(_30 == 1 && tam_aux <= TAM){
-//                fj *node = (fj*)malloc(sizeof(fj));
-//                node->processo = numero_processos;
-//                node->unidadeTempo = geraAleatorio();
-//                insereOrdenado(node, &fila);
-//                tam_aux++;
-//                numero_processos++;
-//            }
-//
-//            //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
-//            fila->unidadeTempo--;
-//            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\n",  iteracoes, fila->processo, fila->unidadeTempo,fila->prox->processo, fila->prox->unidadeTempo);
-//
-//            if(fila->unidadeTempo == 0) {
-//                fila = fila->prox;
-//            }
-//            iteracoes++;
-//        }
-//    
-//    return numero_processos-1;
-//}
+void insereOrdenado(fj *node, fj *fila) 
+{
+    fj *novo = node;
+    fj *raiz = fila;
+    fj *ant;
+    while (raiz->prox != NULL && raiz->unidadeTempo <= node->unidadeTempo) {
+        ant = raiz;
+        raiz = raiz->prox;
+    }
+
+    if (raiz->prox == NULL) {
+        raiz->prox = node;
+    } else {
+        ant->prox = novo;
+        novo->prox = raiz;
+    }
+    free(ant);
+
+}
+
+
+/*
+int firstJob() {
+    int iteracoes = 0;
+    int numero_processos = 1;
+    int tam_aux = 1;
+    int _30;
+    fj *fila = (fj*)malloc(sizeof(fj));
+    fila->processo = numero_processos;
+    fila->unidadeTempo = geraAleatorio();
+    fila->prox = NULL;
+    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\n",  iteracoes, fila->processo, fila->unidadeTempo);
+    iteracoes++;
+    numero_processos++;
+
+    while(fila->unidadeTempo > 0 && iteracoes < 1000) {
+        _30 = trinta();
+        if(_30 == 1 && tam_aux <= TAM){
+            fj *node = (fj*)malloc(sizeof(fj));
+            node->processo = numero_processos;
+            node->unidadeTempo = geraAleatorio();
+            insereOrdenado(node, fila);
+            tam_aux++;
+            numero_processos++;
+        }
+        //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
+        fila->unidadeTempo--;
+        printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\n",  iteracoes, fila->processo, fila->unidadeTempo,fila->prox->processo, fila->prox->unidadeTempo);
+
+        if (fila->unidadeTempo == 0) {
+            printf("entrou");
+            fj *temp = fila;
+            fila = fila->prox;
+            free(temp);  // Free the memory of the completed job
+        }   
+        iteracoes++;
+    }
+    
+    return numero_processos-1;
+}
+
+*/
 
 
 int firstCome() {
@@ -130,6 +137,7 @@ int firstCome() {
     
     return numero_processos-1;
 }
+
 
 
 
