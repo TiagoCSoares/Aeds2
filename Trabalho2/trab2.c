@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #define TAM 1000000
 
 typedef struct firstCome {
@@ -27,7 +28,7 @@ typedef struct roundRobin {
 
 int trinta() {
     int i = rand() % 10 + 1;
-    if(i >= 1 && i <= 9){
+    if(i >= 1 && i <= 3){
         return 1;
     } else { 
         return 0;
@@ -69,15 +70,19 @@ int firstJob() {
     int numero_processos = 1;
     int tam_aux = 1;
     int _30;
+    int criado = 0;
+    int processo_criado, tempo_criado;
     fj *fila = (fj*)malloc(sizeof(fj));
     fila->processo = numero_processos;
     fila->unidadeTempo = geraAleatorio();
+    //fila->unidadeTempo = 19;
     fila->prox = NULL;
-    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\n",  iteracoes, fila->processo, fila->unidadeTempo);
+    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\tAção: Criação do processo:(%d, %d)\n", 
+    iteracoes, fila->processo, fila->unidadeTempo, fila->processo, fila->unidadeTempo);
     iteracoes++;
     numero_processos++;
 
-    while(fila->unidadeTempo > 0 && iteracoes < 10000000) {
+    while(fila->unidadeTempo > 0 && iteracoes < 100) {
         _30 = trinta();
         if(_30 == 1 && tam_aux <= TAM){
             fj *node = (fj*)malloc(sizeof(fj));
@@ -86,19 +91,30 @@ int firstJob() {
             insereOrdenado(node, fila);
             tam_aux++;
             numero_processos++;
+            processo_criado = numero_processos;
+            tempo_criado = node->unidadeTempo;
+            criado++;
         }
         //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
         fila->unidadeTempo--;
         if(fila->prox != NULL) {
-            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\n",  iteracoes, fila->processo, fila->unidadeTempo,fila->prox->processo, fila->prox->unidadeTempo);
+            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)",  
+            iteracoes, fila->processo, fila->unidadeTempo,fila->prox->processo, fila->prox->unidadeTempo);
         } else {
-            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\n",  iteracoes, fila->processo, fila->unidadeTempo);
+            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)",  
+            iteracoes, fila->processo, fila->unidadeTempo);
+        }
+        if(criado == 1) {
+            printf("\tAção: Criação do processo (Id:%d, Tempo:%d)\n", processo_criado, tempo_criado);
+            criado--;
+        }   else {
+            printf("\tAção: Nenhuma\n");
         }
 
-        if (fila->unidadeTempo == 1) {
+        if (fila->unidadeTempo == 0) {
             fj *temp = fila;
             fila = fila->prox;
-            free(temp);  // Free the memory of the completed job
+            free(temp);  // Liberar espaço de memória do processo finalizado
         }   
         iteracoes++;
     }
@@ -172,7 +188,7 @@ int firstCome() {
 
 
 int main() {
-
+    srand(time(NULL));
     int define = 1;
     int a = 0;
     int b = 0;
@@ -208,6 +224,9 @@ int main() {
     //printf("\n%d\n", lakaka);
     int lakaka2 = firstJob();
     printf("\n%d\n", lakaka2);
+
+
+
     return 0;
 }
 
