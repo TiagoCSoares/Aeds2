@@ -1,13 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#define TAM 1000000
+
 
 typedef struct firstCome {
     int unidadeTempo;
     int processo;
+    struct firstCome *prox;
 } fcfs;
 
+
+typedef struct {
+    fcfs* inicio;
+    fcfs* fim;
+} extremidades;
 
 
 typedef struct firstJob {
@@ -42,78 +48,88 @@ int geraAleatorio(){
 }
 
 
-void insereOrdenado(fj *node, fj *fila) 
-{
-    fj *novo = node;
-    fj *raiz = fila;
-    fj *ant = NULL;
+//-------------------------------------------------------------------
+//Funções para o firstJob
 
-    while (raiz != NULL && raiz->unidadeTempo <= node->unidadeTempo) {
-        ant = raiz;
-        raiz = raiz->prox;
+
+// Funciona
+void inserirOrdenado(fj **lista, int novoProcesso, int novaUnidadeTempo) {
+    fj *novoNo = (fj *)malloc(sizeof(fj));
+    if (!novoNo) {
+        fprintf(stderr, "Erro ao alocar memória para o novo nó.\n");
+        exit(EXIT_FAILURE);
     }
+    novoNo->processo = novoProcesso;
+    novoNo->unidadeTempo = novaUnidadeTempo;
+    novoNo->prox = NULL;
 
-    if (ant == NULL) {
-        novo->prox = fila;
-        fila = novo;
+    if (*lista == NULL || novaUnidadeTempo < (*lista)->unidadeTempo) {
+        // Inserir no início
+        novoNo->prox = *lista;
+        *lista = novoNo;
     } else {
-        ant->prox = novo;
-        novo->prox = raiz;
+        // Encontrar posição de inserção
+        fj *atual = *lista;
+        while (atual->prox != NULL && atual->prox->unidadeTempo < novaUnidadeTempo) {
+            atual = atual->prox;
+        }
+
+        // Inserir no meio ou no final
+        novoNo->prox = atual->prox;
+        atual->prox = novoNo;
     }
 }
 
 
-
-
+//Funcionando perfeitamente
 int firstJob() {
     int iteracoes = 0;
     int numero_processos = 1;
-    int tam_aux = 1;
     int _30;
     int criado = 0;
-    int processo_criado, tempo_criado;
-    fj *fila = (fj*)malloc(sizeof(fj));
-    fila->processo = numero_processos;
-    fila->unidadeTempo = geraAleatorio();
+    int processo_criado = 0, tempo_criado = 0;
+    fj *lista = (fj*)malloc(sizeof(fj));
+    lista->processo = numero_processos;
+    lista->unidadeTempo = geraAleatorio();
     //fila->unidadeTempo = 19;
-    fila->prox = NULL;
+    lista->prox = NULL;
     printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\tAção: Criação do processo:(%d, %d)\n", 
-    iteracoes, fila->processo, fila->unidadeTempo, fila->processo, fila->unidadeTempo);
+    iteracoes, lista->processo, lista->unidadeTempo, lista->processo, lista->unidadeTempo);
     iteracoes++;
     numero_processos++;
-
-    while(fila->unidadeTempo > 0 && iteracoes < 100) {
+    
+    while(1) {
         _30 = trinta();
-        if(_30 == 1 && tam_aux <= TAM){
+        if(_30 == 1){
             fj *node = (fj*)malloc(sizeof(fj));
-            node->processo = numero_processos;
-            node->unidadeTempo = geraAleatorio();
-            insereOrdenado(node, fila);
-            tam_aux++;
-            numero_processos++;
+            
+            inserirOrdenado(&lista, numero_processos, geraAleatorio());
             processo_criado = numero_processos;
             tempo_criado = node->unidadeTempo;
-            criado++;
-        }
-        //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
-        fila->unidadeTempo--;
-        if(fila->prox != NULL) {
+            numero_processos++;
+            criado = 1;
+            free(node);
+            }
+
+        lista->unidadeTempo--;
+        if(lista->prox != NULL) {
             printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)",  
-            iteracoes, fila->processo, fila->unidadeTempo,fila->prox->processo, fila->prox->unidadeTempo);
+            iteracoes, lista->processo, lista->unidadeTempo,lista->prox->processo, lista->prox->unidadeTempo);
         } else {
             printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)",  
-            iteracoes, fila->processo, fila->unidadeTempo);
+            iteracoes, lista->processo, lista->unidadeTempo);
         }
         if(criado == 1) {
             printf("\tAção: Criação do processo (Id:%d, Tempo:%d)\n", processo_criado, tempo_criado);
-            criado--;
+            criado = 0;
         }   else {
             printf("\tAção: Nenhuma\n");
         }
+        //lista->unidadeTempo--;
 
-        if (fila->unidadeTempo == 0) {
-            fj *temp = fila;
-            fila = fila->prox;
+        if (lista->unidadeTempo == 0) {
+            fj *temp = lista;
+            lista = lista->prox;
             free(temp);  // Liberar espaço de memória do processo finalizado
         }   
         iteracoes++;
@@ -124,7 +140,7 @@ int firstJob() {
 
 
 
-
+/*
 int roundRobin() {
     int iteracoes = 0;
     int numero_processos = 1;
@@ -141,42 +157,100 @@ int roundRobin() {
 
 }
 
+*/
 
-/*
+
+
+
+
+
+//-----------------------------------------------------------------
+// Funções para o firstCome
+
+
+void enfileirar(extremidades* fila, int processo, int tempo) {
+    fcfs* novo = (fcfs*)malloc(sizeof(fcfs));
+    novo->unidadeTempo = tempo;
+    novo->processo = processo;
+    novo->prox = NULL;
+
+    if (fila->fim == NULL) {
+        fila->fim = novo;
+        fila->inicio = novo;
+    } else {
+        fila->fim->prox = novo;
+        fila->fim = novo;
+    }
+
+    // Adicionamos este trecho para garantir que fila->inicio->prox seja definido corretamente
+    if (fila->inicio->prox == NULL) {
+        fila->inicio->prox = novo;
+    }
+}
+
+void desenfileirar(extremidades* fila) {
+    if (fila->inicio == NULL) {
+        printf("Fila vazia\n");
+        return;
+    }
+
+    fcfs* remove = fila->inicio;
+    fila->inicio = fila->inicio->prox;
+
+    if (fila->inicio == NULL) {
+        fila->fim = NULL;
+    }
+
+    free(remove);
+}
+
+
+
+
 int firstCome() {
 
-    //TODO: Retirar o tamanho fixo da lista
+    extremidades fila;
+    fila.inicio = NULL;
+    fila.fim = NULL;
+
     int iteracoes = 0;
     int numero_processos = 1;
-    int tamanho = 0;
-    int tam_aux = 1;
     int _30;
-    fcfs fila[TAM];
-    int inicio = 0;
-    int fim = 0;
-    fila[tamanho].processo = numero_processos;
+    int criado = 0;
+    int processo_criado = 0, tempo_criado = 0;
+    tempo_criado = geraAleatorio();
+    enfileirar(&fila, numero_processos, tempo_criado);
+
+    printf("fila.inicio%d,%d\n", fila.inicio->processo, fila.inicio->unidadeTempo);
     numero_processos++;
-    fila[tamanho].unidadeTempo = geraAleatorio();
-    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
+
+    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\tAção: Nenhuma\n", iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo);
+
+    printf("Lakaka");
     iteracoes++;
-
     //TODO: Loop infinito (?)
-    while(fila[tamanho].unidadeTempo > 0 && tamanho <= TAM) {
-
+    while(iteracoes > 0) {
         _30 = trinta();
-        if(_30 == 1 && tam_aux <= TAM){
-            fila[tam_aux].processo = numero_processos;
-            fila[tam_aux].unidadeTempo = geraAleatorio();
-            tam_aux++;
+        if(_30 == 1){
+            tempo_criado = geraAleatorio();
+            enfileirar(&fila, numero_processos, tempo_criado);
             numero_processos++;
+            criado = 1;
         }
 
         //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
-        fila[tamanho].unidadeTempo--;
-        printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo,fila[tamanho+1].processo, fila[tamanho+1].unidadeTempo);
-
-        if(fila[tamanho].unidadeTempo == 0) {
-            tamanho++;
+        fila.inicio->unidadeTempo--;
+        if(criado == 1) {
+            //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\tAção: Criado processo (Id:%d, Tempo: %d\n",
+            //iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo ,fila.inicio->prox->processo, fila.inicio->prox->unidadeTempo,
+            //(numero_processos-1), tempo_criado);
+            criado = 0;
+        } else {
+            //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\tAção: Nenhuma\n", iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo ,fila.inicio->prox->processo, fila.inicio->prox->unidadeTempo);
+        }
+        
+        if(fila.inicio->unidadeTempo == 0) {
+            desenfileirar(&fila);
         }
         iteracoes++;
     }
@@ -184,7 +258,8 @@ int firstCome() {
     return numero_processos-1;
 }
 
-*/
+
+
 
 
 int main() {
@@ -220,10 +295,10 @@ int main() {
         } 
         }
         */
-    //int lakaka = firstCome();
-    //printf("\n%d\n", lakaka);
-    int lakaka2 = firstJob();
-    printf("\n%d\n", lakaka2);
+    int lakaka = firstCome();
+    printf("\n%d\n", lakaka);
+    //int lakaka2 = firstJob();
+    //printf("\n%d\n", lakaka2);
 
 
 
