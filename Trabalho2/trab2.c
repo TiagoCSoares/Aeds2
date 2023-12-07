@@ -204,14 +204,14 @@ int roundRobin() {
     iteracoes++;
     numero_processos++;
     
-    while(1) {
+    while(iteracoes < 100) {
         _30 = trinta();
         if(_30 == 1){
             tempo_criado = geraAleatorio();
             enfileirar(&lista, numero_processos, tempo_criado);
             numero_processos++;
             criado = 1;
-            }
+        }
 
         lista.inicio->unidadeTempo--;
         _6++;
@@ -230,12 +230,11 @@ int roundRobin() {
             printf("\tAção: Nenhuma\n");
         }
         //lista->unidadeTempo--;
-
         if (lista.inicio->unidadeTempo == 0) {
             desenfileirar(&lista);
             _6 = 0;
         }   
-        if (_6 = 6) {
+        if (_6 == 6) {
             enfileirar(&lista, lista.inicio->processo, lista.inicio->unidadeTempo);
             desenfileirar(&lista);
             _6 = 0;
@@ -245,9 +244,6 @@ int roundRobin() {
     
     return numero_processos-1;
 }
-
-
-
 
 
 
@@ -315,7 +311,6 @@ int firstCome() {
 
     printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\tAção: Nenhuma\n", iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo);
 
-    printf("Lakaka");
     iteracoes++;
     //TODO: Loop infinito (?)
     while(1) {
@@ -388,9 +383,6 @@ int main() {
         } 
         }
         
-
-
-
 
     return 0;
 }
