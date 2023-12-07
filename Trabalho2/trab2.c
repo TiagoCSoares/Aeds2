@@ -30,6 +30,10 @@ typedef struct roundRobin {
     struct roundRobin *prox;
 } rr;
 
+typedef struct {
+    rr* inicio;
+    rr* fim;
+} roundEx;
 
 
 int trinta() {
@@ -50,9 +54,9 @@ int geraAleatorio(){
 
 //-------------------------------------------------------------------
 //Funções para o firstJob
+//First Job funciona
 
 
-// Funciona
 void inserirOrdenado(fj **lista, int novoProcesso, int novaUnidadeTempo) {
     fj *novoNo = (fj *)malloc(sizeof(fj));
     if (!novoNo) {
@@ -81,7 +85,7 @@ void inserirOrdenado(fj **lista, int novoProcesso, int novaUnidadeTempo) {
 }
 
 
-//Funcionando perfeitamente
+
 int firstJob() {
     int iteracoes = 0;
     int numero_processos = 1;
@@ -91,7 +95,6 @@ int firstJob() {
     fj *lista = (fj*)malloc(sizeof(fj));
     lista->processo = numero_processos;
     lista->unidadeTempo = geraAleatorio();
-    //fila->unidadeTempo = 19;
     lista->prox = NULL;
     printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\tAção: Criação do processo:(%d, %d)\n", 
     iteracoes, lista->processo, lista->unidadeTempo, lista->processo, lista->unidadeTempo);
@@ -140,24 +143,109 @@ int firstJob() {
 
 
 
-/*
+
+//----------------------------------------------
+// Funções para o roundRobin
+void desenfileirar(roundEx* fila) {
+    if (fila->inicio == NULL) {
+        printf("Fila vazia\n");
+        return;
+    }
+
+    rr* remove = fila->inicio;
+    fila->inicio = fila->inicio->prox;
+
+    if (fila->inicio == NULL) {
+        fila->fim = NULL;
+    }
+
+    free(remove);
+}
+
+
+void enfileirar(roundEx* fila, int processo, int tempo) {
+    rr* novo = (rr*)malloc(sizeof(rr));
+    novo->unidadeTempo = tempo;
+    novo->processo = processo;
+    novo->prox = NULL;
+
+    if (fila->fim == NULL) {
+        fila->fim = novo;
+        fila->inicio = novo;
+    } else {
+        fila->fim->prox = novo;
+        fila->fim = novo;
+    }
+
+    // Adicionamos este trecho para garantir que fila->inicio->prox seja definido corretamente
+    if (fila->inicio->prox == NULL) {
+        fila->inicio->prox = novo;
+    }
+}
+
+
+
 int roundRobin() {
     int iteracoes = 0;
     int numero_processos = 1;
-    int tamanho = 0;int tam_aux = 1;
     int _30;
-    rr *fila = (rr*)malloc(sizeof(rr));
-    fila[tamanho].processo = numero_processos;
-    fila[tamanho].unidadeTempo = geraAleatorio();
-    fila[tamanho].prox = NULL;
+    int criado = 0;
+    int tempo_criado;
+    int processo_criado = 0;
+    int _6 = 0;
 
+    roundEx lista;
+    lista.fim = NULL;
+    lista.inicio = NULL;
 
+    enfileirar(&lista, numero_processos, geraAleatorio());
+    printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)\tAção: Criação do processo:(%d, %d)\n", 
+    iteracoes, lista.inicio->processo, lista.inicio->unidadeTempo, lista.inicio->processo, lista.inicio->unidadeTempo);
+    iteracoes++;
+    numero_processos++;
+    
+    while(1) {
+        _30 = trinta();
+        if(_30 == 1){
+            tempo_criado = geraAleatorio();
+            enfileirar(&lista, numero_processos, tempo_criado);
+            numero_processos++;
+            criado = 1;
+            }
 
-    return numero_processos;
+        lista.inicio->unidadeTempo--;
+        _6++;
 
+        if(lista.inicio->prox != NULL) {
+            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)",  
+            iteracoes, lista.inicio->processo, lista.inicio->unidadeTempo,lista.inicio->prox->processo, lista.inicio->prox->unidadeTempo);
+        } else {
+            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)",  
+            iteracoes, lista.inicio->processo, lista.inicio->unidadeTempo);
+        }
+        if(criado == 1) {
+            printf("\tAção: Criação do processo (Id:%d, Tempo:%d)\n", (numero_processos-1), tempo_criado);
+            criado = 0;
+        }   else {
+            printf("\tAção: Nenhuma\n");
+        }
+        //lista->unidadeTempo--;
+
+        if (lista.inicio->unidadeTempo == 0) {
+            desenfileirar(&lista);
+            _6 = 0;
+        }   
+        if (_6 = 6) {
+            enfileirar(&lista, lista.inicio->processo, lista.inicio->unidadeTempo);
+            desenfileirar(&lista);
+            _6 = 0;
+        }
+        iteracoes++;
+    }
+    
+    return numero_processos-1;
 }
 
-*/
 
 
 
@@ -166,9 +254,10 @@ int roundRobin() {
 
 //-----------------------------------------------------------------
 // Funções para o firstCome
+// First Come funcionando
 
 
-void enfileirar(extremidades* fila, int processo, int tempo) {
+void enfileirarF(extremidades* fila, int processo, int tempo) {
     fcfs* novo = (fcfs*)malloc(sizeof(fcfs));
     novo->unidadeTempo = tempo;
     novo->processo = processo;
@@ -188,7 +277,7 @@ void enfileirar(extremidades* fila, int processo, int tempo) {
     }
 }
 
-void desenfileirar(extremidades* fila) {
+void desenfileirarF(extremidades* fila) {
     if (fila->inicio == NULL) {
         printf("Fila vazia\n");
         return;
@@ -217,9 +306,9 @@ int firstCome() {
     int numero_processos = 1;
     int _30;
     int criado = 0;
-    int processo_criado = 0, tempo_criado = 0;
+    int processo_criado = 0, tempo_criado;
     tempo_criado = geraAleatorio();
-    enfileirar(&fila, numero_processos, tempo_criado);
+    enfileirarF(&fila, numero_processos, tempo_criado);
 
     printf("fila.inicio%d,%d\n", fila.inicio->processo, fila.inicio->unidadeTempo);
     numero_processos++;
@@ -229,28 +318,33 @@ int firstCome() {
     printf("Lakaka");
     iteracoes++;
     //TODO: Loop infinito (?)
-    while(iteracoes > 0) {
+    while(1) {
         _30 = trinta();
         if(_30 == 1){
             tempo_criado = geraAleatorio();
-            enfileirar(&fila, numero_processos, tempo_criado);
+            enfileirarF(&fila, numero_processos, tempo_criado);
             numero_processos++;
             criado = 1;
         }
 
         //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\n",  iteracoes, fila[tamanho].processo, fila[tamanho].unidadeTempo);
         fila.inicio->unidadeTempo--;
-        if(criado == 1) {
-            //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\tAção: Criado processo (Id:%d, Tempo: %d\n",
-            //iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo ,fila.inicio->prox->processo, fila.inicio->prox->unidadeTempo,
-            //(numero_processos-1), tempo_criado);
-            criado = 0;
+        if(fila.inicio->prox != NULL) {
+            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)",  
+            iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo,fila.inicio->prox->processo, fila.inicio->prox->unidadeTempo);
         } else {
-            //printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(%d, %d)\tAção: Nenhuma\n", iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo ,fila.inicio->prox->processo, fila.inicio->prox->unidadeTempo);
+            printf("Iteração:%d\tID_processo:%d\tUnidadeTempoRestante:%d\tPróximoProcesso:(NULL, NULL)",  
+            iteracoes, fila.inicio->processo, fila.inicio->unidadeTempo);
+        }
+        if(criado == 1) {
+            printf("\tAção: Criação do processo (Id:%d, Tempo:%d)\n", (numero_processos-1), tempo_criado);
+            criado = 0;
+        }   else {
+            printf("\tAção: Nenhuma\n");
         }
         
         if(fila.inicio->unidadeTempo == 0) {
-            desenfileirar(&fila);
+            desenfileirarF(&fila);
         }
         iteracoes++;
     }
@@ -265,9 +359,8 @@ int firstCome() {
 int main() {
     srand(time(NULL));
     int define = 1;
-    int a = 0;
-    int b = 0;
-    /*while(define != 0){
+    int lakaka = 0;
+    while(define != 0){
         printf("\nEscolha o método desejado:\n");
         printf("1- First Come, First Served\n");
         printf("2- Shortest Job First\n");
@@ -278,14 +371,14 @@ int main() {
 
         switch (define) {
             case 1:
-                int lakaka = firstCome();
+                lakaka = firstCome();
                 break;
             case 2:
-                a = geraAleatorio();
+                lakaka = firstJob();
                 break;
             case 3:
-                a = geraAleatorio();
-                    break;
+                lakaka = roundRobin();
+                break;
             case 0:
                 printf("Saindo do programa");
                 break;
@@ -294,11 +387,8 @@ int main() {
         
         } 
         }
-        */
-    int lakaka = firstCome();
-    printf("\n%d\n", lakaka);
-    //int lakaka2 = firstJob();
-    //printf("\n%d\n", lakaka2);
+        
+
 
 
 
